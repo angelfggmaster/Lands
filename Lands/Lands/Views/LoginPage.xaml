@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Login"
+             x:Class="Lands.Views.LoginPage" BindingContext="{Binding Main, Source={StaticResource Locator}}">
+    <ContentPage.Content>
+        <ScrollView BindingContext="{Binding Login}">
+            <StackLayout Padding="10,20,10,5">
+                <Label Text="Lands" FontSize="Large" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"/>
+                <Image Source="onu_logo" WidthRequest="200"></Image>
+                <Grid Margin="0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="E-mail" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
+                    <Entry Placeholder="Enter your email..." Keyboard="Email" Grid.Row="0" Grid.Column="1" Text="{Binding Email, Mode=TwoWay}"/>
+                    <Label Text="Password" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
+                    <Entry Placeholder="Enter your password..." IsPassword="True" Grid.Row="1" Grid.Column="1" Text="{Binding Password, Mode=TwoWay}"/>
+                </Grid>
+                <ActivityIndicator VerticalOptions="CenterAndExpand" IsRunning="{Binding IsRunning, Mode=TwoWay}"></ActivityIndicator>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Rememberme in this device" VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                    <Switch HorizontalOptions="End" IsToggled="{Binding IsRemembered, Mode=TwoWay}"></Switch>
+                </StackLayout>
+                <StackLayout Margin="40,0">
+                    <Button 
+                        Text="Login" 
+                        BackgroundColor="Navy" 
+                        TextColor="White" 
+                        BorderRadius="23" 
+                        HeightRequest="46" 
+                        HorizontalOptions="FillAndExpand"
+                        IsEnabled="{Binding IsEnabled, Mode=TwoWay}"
+                        Command="{Binding LoginCommand}">
+                    </Button>
+                    <Button
+                        Text="Register" 
+                        BackgroundColor="Purple" 
+                        TextColor="White" 
+                        BorderRadius="23" 
+                        HeightRequest="46"
+                        HorizontalOptions="FillAndExpand"
+                        IsEnabled="{Binding IsEnabled, Mode=TwoWay}">
+                    </Button>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <Image Source="facebook_logo" WidthRequest="50" Aspect="AspectFit"/>
+                    <Image Source="twiter_logo" WidthRequest="50" Aspect="AspectFit"/>
+                    <Image Source="instagram_logo" WidthRequest="50" Aspect="AspectFit"/>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
