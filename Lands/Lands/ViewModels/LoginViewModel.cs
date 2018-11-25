@@ -1,30 +1,53 @@
-﻿using GalaSoft.MvvmLight.Command;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+
+using GalaSoft.MvvmLight.Command;
+
+using Lands.Views;
+
 using Xamarin.Forms;
-using System.ComponentModel;
 
 namespace Lands.ViewModels
 {
-    public class LoginViewModel : INotifyPropertyChanged
+    public class LoginViewModel : BaseViewModel
     {
-        public string Email { get; set; }
+        #region Properties
+        public string Email
+        {
+            get => this.email;
+            set => SetValue(ref this.email, value);
+        }
 
-        public string Password { get; set; }
+        public string Password
+        {
+            get => this.password;
+            set => SetValue(ref this.password, value);
+        }
 
-        public bool IsRunning { get; set; }
+        public bool IsRunning
+        {
+            get => this.isRunning;
+            set => SetValue(ref this.isRunning, value);
+        }
 
         public bool IsRemembered { get; set; }
 
-        public bool IsEnabled { get; set; }
+        public bool IsEnabled
+        {
+            get => this.isEnabled;
+            set => SetValue(ref this.isEnabled, value);
+        }
 
         public ICommand LoginCommand => new RelayCommand(Login);
+        #endregion
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
+        #region Attributes
         private string password;
         private bool isRunning;
         private bool isEnabled;
+        private string email;
+        #endregion
 
+        #region Methods
         private async void Login()
         {
             if (string.IsNullOrEmpty(Email))
@@ -37,12 +60,20 @@ namespace Lands.ViewModels
                 await Application.Current.MainPage.DisplayAlert("Error", "You must enter an password", "Accept");
                 return;
             }
-        }
 
+            MainViewModel.GetInstance().Lands = new LandsViewModel();
+            await Application.Current.MainPage.Navigation.PushAsync(new LandsPage());
+        }
+        #endregion
+
+        #region Constructors
         public LoginViewModel()
         {
-            IsRemembered = true;
+            this.IsRemembered = true;
+            this.isEnabled = true;
+
         }
+        #endregion
     }
 }
 
