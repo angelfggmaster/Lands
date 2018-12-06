@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+
 using GalaSoft.MvvmLight.Command;
+
 using Lands.Models;
 using Lands.Views;
+
 using Xamarin.Forms;
 
 namespace Lands.ViewModels

@@ -6,10 +6,43 @@
              BindingContext="{Binding Main, Source={StaticResource Locator}}"
              Icon="ic_action_language">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Borders"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <StackLayout BindingContext="{Binding Land}"
+                     Padding="5">
+            <Label 
+                FontSize="Large"
+                FontAttributes="Bold"
+                Text="{Binding Land.Name}"
+                TextColor="Black"
+                HorizontalOptions="Center">
+            </Label>
+            <ListView
+                HasUnevenRows="True"
+                ItemsSource="{Binding Borders}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                    Grid.Column="0"
+                                    FontAttributes="Bold"
+                                    FontSize="Medium"
+                                    Text="{Binding Code}"
+                                    TextColor="Black">
+                                </Label>
+                                <Label
+                                    Grid.Column="1"
+                                    Text="{Binding Name}"
+                                    TextColor="Black">
+                                </Label>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -1,24 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+
 using GalaSoft.MvvmLight.Command;
+
 using Lands.Models;
 using Lands.Services;
+
 using Xamarin.Forms;
 
 namespace Lands.ViewModels
 {
     public class LandsViewModel : BaseViewModel
     {
+        #region Services
         private ApiService apiService;
+        #endregion
+
+        #region Attributes
+        private ObservableCollection<LandItemViewModel> lands;
         private bool isRefreshing;
         private string filter;
-        private List<Land> landsList;
+        #endregion
 
-        private ObservableCollection<LandItemViewModel> lands;
-
+        #region Properties
         public ObservableCollection<LandItemViewModel> Lands
         {
             get => this.lands;
@@ -38,13 +44,17 @@ namespace Lands.ViewModels
                 this.Search();
             }
         }
+        #endregion
 
+        #region Constructors
         public LandsViewModel()
         {
             this.apiService = new ApiService();
             this.LoadLands();
         }
+        #endregion
 
+        #region Methods
         private async void LoadLands()
         {
             this.IsRefreshing = true;
@@ -70,42 +80,44 @@ namespace Lands.ViewModels
                 return;
             }
 
-            this.landsList = (List<Land>)response.Result;
+            MainViewModel.GetInstance().LandsList = (List<Land>)response.Result;
             this.Lands = new ObservableCollection<LandItemViewModel>(this.ToLandItemViewModel());
             this.IsRefreshing = false;
         }
 
         private IEnumerable<LandItemViewModel> ToLandItemViewModel()
         {
-            return this.landsList.Select(l => new LandItemViewModel
+            return MainViewModel.GetInstance().LandsList.Select(l => new LandItemViewModel
             {
                 Alpha2Code = l.Alpha2Code,
                 Alpha3Code = l.Alpha3Code,
                 AltSpellings = l.AltSpellings,
                 Area = l.Area,
-                Borders=l.Borders,
-                CallingCodes=l.CallingCodes,
-                Capital=l.Capital,
-                Cioc=l.Cioc,
-                Currencies=l.Currencies,
-                Demonym=l.Demonym,
-                Flag=l.Flag,
-                Gini=l.Gini,
-                Languages=l.Languages,
-                Latlng=l.Latlng,
-                Name=l.Name,
-                NativeName=l.NativeName,
-                NumericCode=l.NumericCode,
-                Population=l.Population,
-                Region=l.Region,
-                RegionalBlocs=l.RegionalBlocs,
-                Subregion=l.Subregion,
-                TimeZones=l.TimeZones,
-                TopLevelDomain=l.TopLevelDomain,
-                Translations=l.Translations
+                Borders = l.Borders,
+                CallingCodes = l.CallingCodes,
+                Capital = l.Capital,
+                Cioc = l.Cioc,
+                Currencies = l.Currencies,
+                Demonym = l.Demonym,
+                Flag = l.Flag,
+                Gini = l.Gini,
+                Languages = l.Languages,
+                Latlng = l.Latlng,
+                Name = l.Name,
+                NativeName = l.NativeName,
+                NumericCode = l.NumericCode,
+                Population = l.Population,
+                Region = l.Region,
+                RegionalBlocs = l.RegionalBlocs,
+                Subregion = l.Subregion,
+                TimeZones = l.TimeZones,
+                TopLevelDomain = l.TopLevelDomain,
+                Translations = l.Translations
             });
         }
+        #endregion
 
+        #region Commands
         public ICommand RefreshCommand => new RelayCommand(this.LoadLands);
 
         public ICommand SearchCommand => new RelayCommand(this.Search);
@@ -122,6 +134,7 @@ namespace Lands.ViewModels
                 l.Name.ToLower().Contains(this.Filter.ToLower()) ||
                 l.Capital.ToLower().Contains(this.Filter.ToLower())));
             }
-        }
+        } 
+        #endregion
     }
 }
