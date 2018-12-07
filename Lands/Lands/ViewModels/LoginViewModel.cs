@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 
 using GalaSoft.MvvmLight.Command;
-
+using Lands.Services;
 using Lands.Views;
 
 using Xamarin.Forms;
@@ -47,6 +47,20 @@ namespace Lands.ViewModels
         private string email;
         #endregion
 
+        #region Services
+        private ApiService apiService;
+        #endregion
+
+        #region Constructors
+        public LoginViewModel()
+        {
+            this.IsRemembered = true;
+            this.isEnabled = true;
+            this.apiService = new ApiService();
+
+        }
+        #endregion
+
         #region Methods
         private async void Login()
         {
@@ -61,17 +75,45 @@ namespace Lands.ViewModels
                 return;
             }
 
-            MainViewModel.GetInstance().Lands = new LandsViewModel();
+            var connection = await this.apiService.CheckConnection();
+            if (!connection.IsSuccess)
+            {
+                this.IsRunning = false;
+                this.IsEnabled = true;
+                await Application.Current.MainPage.DisplayAlert("Error", connection.Message, "Accept");
+                return;
+            }
+
+            var token = await this.apiService.GetToken("http://localhost/Lands.Backend", this.Email, this.Password);
+
+            if (token == null)
+            {
+                this.IsRunning = false;
+                this.IsEnabled = true;
+                await Application.Current.MainPage.DisplayAlert("Error", "Something was wrong, please try later.", "Accept");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(token.AccessToken))
+            {
+                this.IsRunning = false;
+                this.IsEnabled = true;
+                await Application.Current.MainPage.DisplayAlert("Error", token.ErrorDescription, "Accept");
+                this.Password = string.Empty;
+                return;
+            }
+
+            var mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.Token = token;
+
+            mainViewModel.Lands = new LandsViewModel();
             await Application.Current.MainPage.Navigation.PushAsync(new LandsPage());
-        }
-        #endregion
 
-        #region Constructors
-        public LoginViewModel()
-        {
-            this.IsRemembered = true;
-            this.isEnabled = true;
+            this.IsRunning = false;
+            this.IsEnabled = true;
 
+            this.Email = string.Empty;
+            this.Password = string.Empty;
         }
         #endregion
     }

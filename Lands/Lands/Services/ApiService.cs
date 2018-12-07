@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 using Lands.Models;
@@ -39,6 +40,28 @@ namespace Lands.Services
                 IsSuccess = true,
                 Message = "Ok"
             };
+        }
+
+        public async Task<TokenResponse> GetToken(string urlBase, string username, string passwod)
+        {
+            try
+            {
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(urlBase);
+                var response = await client.PostAsync("Token",
+                    new StringContent(string.Format(
+                        "grant_type=password&username={0}&password={1}",
+                        username, passwod),
+                        Encoding.UTF8, "application/x-www-form-urlencoded"));
+                var resultJSON = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<TokenResponse>(resultJSON);
+
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public async Task<Response> GetList<T>(
