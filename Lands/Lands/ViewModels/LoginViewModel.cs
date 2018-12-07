@@ -75,36 +75,36 @@ namespace Lands.ViewModels
                 return;
             }
 
-            var connection = await this.apiService.CheckConnection();
-            if (!connection.IsSuccess)
-            {
-                this.IsRunning = false;
-                this.IsEnabled = true;
-                await Application.Current.MainPage.DisplayAlert("Error", connection.Message, "Accept");
-                return;
-            }
+            //var connection = await this.apiService.CheckConnection();
+            //if (!connection.IsSuccess)
+            //{
+            //    this.IsRunning = false;
+            //    this.IsEnabled = true;
+            //    await Application.Current.MainPage.DisplayAlert("Error", connection.Message, "Accept");
+            //    return;
+            //}
 
-            var token = await this.apiService.GetToken("http://localhost/Lands.Backend", this.Email, this.Password);
+            //var token = await this.apiService.GetToken("http://localhost/Lands.Backend", this.Email, this.Password);
 
-            if (token == null)
-            {
-                this.IsRunning = false;
-                this.IsEnabled = true;
-                await Application.Current.MainPage.DisplayAlert("Error", "Something was wrong, please try later.", "Accept");
-                return;
-            }
+            //if (token == null)
+            //{
+            //    this.IsRunning = false;
+            //    this.IsEnabled = true;
+            //    await Application.Current.MainPage.DisplayAlert("Error", "Something was wrong, please try later.", "Accept");
+            //    return;
+            //}
 
-            if (string.IsNullOrEmpty(token.AccessToken))
-            {
-                this.IsRunning = false;
-                this.IsEnabled = true;
-                await Application.Current.MainPage.DisplayAlert("Error", token.ErrorDescription, "Accept");
-                this.Password = string.Empty;
-                return;
-            }
+            //if (string.IsNullOrEmpty(token.AccessToken))
+            //{
+            //    this.IsRunning = false;
+            //    this.IsEnabled = true;
+            //    await Application.Current.MainPage.DisplayAlert("Error", token.ErrorDescription, "Accept");
+            //    this.Password = string.Empty;
+            //    return;
+            //}
 
             var mainViewModel = MainViewModel.GetInstance();
-            mainViewModel.Token = token;
+            //mainViewModel.Token = token;
 
             mainViewModel.Lands = new LandsViewModel();
             await Application.Current.MainPage.Navigation.PushAsync(new LandsPage());
