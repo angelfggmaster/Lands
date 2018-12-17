@@ -5,6 +5,7 @@ using Lands.Services;
 using Lands.Views;
 
 using Xamarin.Forms;
+using Lands.Helpers;
 
 namespace Lands.ViewModels
 {
@@ -58,6 +59,9 @@ namespace Lands.ViewModels
             this.isEnabled = true;
             this.apiService = new ApiService();
 
+            this.Email = "A";
+            this.Password = "a";
+
         }
         #endregion
 
@@ -66,7 +70,7 @@ namespace Lands.ViewModels
         {
             if (string.IsNullOrEmpty(Email))
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "You must enter an email", "Accept");
+                await Application.Current.MainPage.DisplayAlert(Languages.Error, Languages.EmailValidation, Languages.Accept);
                 return;
             }
             if (string.IsNullOrEmpty(Password))
